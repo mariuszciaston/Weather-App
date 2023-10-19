@@ -1,6 +1,8 @@
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
@@ -10,23 +12,40 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist'),
 		clean: true,
 	},
+	devtool: 'inline-source-map',
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: './src/index.html',
 			favicon: './src/favicon/favicon.ico',
 		}),
-
 		new CopyPlugin({
 			patterns: [{ from: `./src/favicon`, to: '' }],
 		}),
+		new MiniCssExtractPlugin({
+			filename: '[name].css',
+			chunkFilename: '[id].css',
+		}),
 	],
-
 	module: {
 		rules: [
 			{
 				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
+				use: [MiniCssExtractPlugin.loader, 'css-loader'],
+			},
+
+			{
+				test: /\.(?:js|mjs|cjs)$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [['@babel/preset-env', { targets: '>0.25%' }]],
+					},
+				},
 			},
 		],
+	},
+	optimization: {
+		minimizer: [new CssMinimizerPlugin()],
 	},
 };
