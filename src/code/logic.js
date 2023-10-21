@@ -10,6 +10,19 @@ export default class Logic {
 		}
 	}
 
+	static windSpeedConversion(system, windSpeed) {
+		const metricWindSpeed = Math.round(windSpeed * 3.6);
+
+		switch (system) {
+			case 'metric':
+				return `${metricWindSpeed} km/h`;
+			case 'imperial':
+				return `${Math.round(windSpeed)} mph`;
+			default:
+				return `${metricWindSpeed} km/h`;
+		}
+	}
+
 	static extractData(data, system) {
 		const {
 			name: city,
@@ -18,11 +31,13 @@ export default class Logic {
 			wind: { speed: windSpeed },
 			main: { temp, feels_like: feelsLike, pressure, humidity },
 		} = data;
-
 		const temperature = Math.round(temp) + this.addDegrees(system);
 		const feelsLikeTemp = Math.round(feelsLike) + this.addDegrees(system);
+		const windSpeedUnit = this.windSpeedConversion(system, windSpeed);
+		const pressureUnit = `${pressure} hPa`;
+		const humidityPercent = `${humidity}%`;
 
-		return { city, country, weather, description, windSpeed, temperature, feelsLikeTemp, pressure, humidity };
+		return { city, country, weather, description, windSpeedUnit, temperature, feelsLikeTemp, pressureUnit, humidityPercent };
 	}
 
 	static async grabData(city, system) {
@@ -30,16 +45,15 @@ export default class Logic {
 
 		try {
 			const response = await fetch(api, { mode: 'cors' });
+			if (!response.ok) throw new Error(`City '${city}' not found`);
 			const data = this.extractData(await response.json(), system);
 
-			if (!response.ok) {
-				throw new Error(`City ${city} not found`);
-			}
-
 			console.log(data);
+
 			return data;
 		} catch (error) {
-			throw new Error(error);
+			alert(error);
+			return null;
 		}
 	}
 }
