@@ -34,7 +34,7 @@ export default class UI {
 		sampleLocations.addEventListener('click', (e) => {
 			this.loading(true);
 			if (e.target.classList.contains('btn')) {
-				Logic.grabData(e.target.textContent, this.selectUnits()).then(() => {
+				Logic.grabDataByCity(this.selectUnits(), e.target.textContent).then(() => {
 					this.loading(false);
 				});
 			}
@@ -54,7 +54,7 @@ export default class UI {
 			input.value = input.value.trim();
 			if (input.value !== '') {
 				this.loading(true);
-				Logic.grabData(input.value, this.selectUnits())
+				Logic.grabDataByCity(this.selectUnits(), input.value)
 					.then(() => {
 						this.loading(false);
 						input.value = '';
@@ -72,10 +72,13 @@ export default class UI {
 			const position = await new Promise((resolve, reject) => {
 				navigator.geolocation.getCurrentPosition(resolve, reject);
 			});
+			const { latitude } = position.coords;
+			const { longitude } = position.coords;
+			Logic.grabDataByPosition(this.selectUnits(), latitude, longitude);
 			return position;
 		} catch (error) {
-			console.log(error);
-			return error;
+			console.error(error);
+			return null;
 		}
 	}
 
@@ -88,7 +91,6 @@ export default class UI {
 		this.pickCity();
 		this.selectUnits();
 		this.searchCity();
-
 		this.eventListeners();
 	}
 }
