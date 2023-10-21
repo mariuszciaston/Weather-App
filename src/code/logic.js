@@ -44,12 +44,21 @@ export default class Logic {
 		const api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${system}&appid=2871c88944b81fbab922d47012695ba3`;
 
 		try {
-			const response = await fetch(api, { mode: 'cors' });
+			const response = await new Promise((resolve, reject) => {
+				setTimeout(async () => {
+					try {
+						const res = await fetch(api, { mode: 'cors' });
+						resolve(res);
+					} catch (error) {
+						reject(error);
+					}
+				}, 1000);
+			});
+
 			if (!response.ok) throw new Error(`City '${city}' not found`);
 			const data = this.extractData(await response.json(), system);
 
 			console.log(data);
-
 			return data;
 		} catch (error) {
 			alert(error);
