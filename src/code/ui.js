@@ -6,23 +6,26 @@ export default class UI {
 		sampleLocations.addEventListener('click', (e) => {
 			this.loading(true);
 			if (e.target.classList.contains('btn')) {
-				Logic.grabData(e.target.textContent, 'metric').then(() => {
+				Logic.grabData(e.target.textContent, this.selectUnits()).then(() => {
 					this.loading(false);
 				});
 			}
 		});
 	}
 
-	static selectUnits(system = 'metric') {
+	static selectUnits(system) {
 		const unitsBtn = document.querySelector('#change-units');
-		let systemUnits = system;
-		unitsBtn.value = systemUnits;
-		unitsBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
+		let systemUnits = unitsBtn.value || system || 'metric';
+
+		const updateButton = () => {
+			unitsBtn.value = systemUnits;
+			unitsBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
+		};
+		updateButton();
 
 		unitsBtn.addEventListener('click', () => {
 			systemUnits = systemUnits === 'metric' ? 'imperial' : 'metric';
-			unitsBtn.value = systemUnits;
-			unitsBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
+			updateButton();
 		});
 
 		return systemUnits;
@@ -41,7 +44,7 @@ export default class UI {
 			input.value = input.value.trim();
 			if (input.value !== '') {
 				this.loading(true);
-				Logic.grabData(input.value, 'metric')
+				Logic.grabData(input.value, this.selectUnits())
 					.then(() => {
 						this.loading(false);
 						input.value = '';
