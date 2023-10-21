@@ -1,18 +1,6 @@
 import Logic from './logic';
 
 export default class UI {
-	static pickCity() {
-		const sampleLocations = document.querySelector('#sample-locations');
-		sampleLocations.addEventListener('click', (e) => {
-			this.loading(true);
-			if (e.target.classList.contains('btn')) {
-				Logic.grabData(e.target.textContent, this.selectUnits()).then(() => {
-					this.loading(false);
-				});
-			}
-		});
-	}
-
 	static selectUnits(system) {
 		const unitsBtn = document.querySelector('#change-units');
 		let systemUnits = unitsBtn.value || system || 'metric';
@@ -29,6 +17,28 @@ export default class UI {
 		});
 
 		return systemUnits;
+	}
+
+	static loading(toggle) {
+		const cog = document.querySelector('i.fa-cog');
+
+		if (toggle) {
+			cog.classList.add('visible');
+		} else {
+			cog.classList.remove('visible');
+		}
+	}
+
+	static pickCity() {
+		const sampleLocations = document.querySelector('#sample-locations');
+		sampleLocations.addEventListener('click', (e) => {
+			this.loading(true);
+			if (e.target.classList.contains('btn')) {
+				Logic.grabData(e.target.textContent, this.selectUnits()).then(() => {
+					this.loading(false);
+				});
+			}
+		});
 	}
 
 	static searchCity() {
@@ -57,19 +67,28 @@ export default class UI {
 		});
 	}
 
-	static loading(toggle) {
-		const cog = document.querySelector('i.fa-cog');
-
-		if (toggle) {
-			cog.classList.add('visible');
-		} else {
-			cog.classList.remove('visible');
+	static async findMe() {
+		try {
+			const position = await new Promise((resolve, reject) => {
+				navigator.geolocation.getCurrentPosition(resolve, reject);
+			});
+			return position;
+		} catch (error) {
+			console.log(error);
+			return error;
 		}
+	}
+
+	static eventListeners() {
+		const findBtn = document.querySelector('#find-btn');
+		findBtn.addEventListener('click', () => this.findMe());
 	}
 
 	static startApp() {
 		this.pickCity();
 		this.selectUnits();
 		this.searchCity();
+
+		this.eventListeners();
 	}
 }
