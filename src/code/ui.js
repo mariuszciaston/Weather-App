@@ -1,22 +1,21 @@
 import Logic from './logic';
 
 export default class UI {
-	static selectUnits(system) {
+	static setUnit(system) {
 		const unitsBtn = document.querySelector('#change-units');
-		let systemUnits = unitsBtn.value || system || 'metric';
-
-		const updateButton = () => {
-			unitsBtn.value = systemUnits;
-			unitsBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
-		};
-		updateButton();
-
-		unitsBtn.addEventListener('click', () => {
-			systemUnits = systemUnits === 'metric' ? 'imperial' : 'metric';
-			updateButton();
-		});
-
+		const systemUnits = unitsBtn.value || system || 'metric';
+		this.updateUnitBtn(unitsBtn, systemUnits);
 		return systemUnits;
+	}
+
+	static updateUnitBtn(unitsBtn, systemUnits) {
+		unitsBtn.value = systemUnits;
+		unitsBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
+	}
+
+	static toggleUnit(unitsBtn) {
+		const systemUnits = unitsBtn.innerHTML.includes('<b>°C</b>') ? 'imperial' : 'metric';
+		this.updateUnitBtn(unitsBtn, systemUnits);
 	}
 
 	static loading(toggle) {
@@ -29,42 +28,31 @@ export default class UI {
 		}
 	}
 
-	static pickCity() {
-		const sampleLocations = document.querySelector('#sample-locations');
-		sampleLocations.addEventListener('click', (e) => {
-			this.loading(true);
-			if (e.target.classList.contains('btn')) {
-				Logic.grabDataByCity(this.selectUnits(), e.target.textContent).then(() => {
-					this.loading(false);
-				});
-			}
-		});
+	static pickCity(e) {
+		this.loading(true);
+		if (e.target.classList.contains('btn')) {
+			Logic.grabDataByCity(this.setUnit(), e.target.textContent).then(() => {
+				this.loading(false);
+			});
+		}
 	}
 
 	static searchCity() {
 		const input = document.querySelector('#search-input');
-		const btn = document.querySelector('#search-btn');
-		const searchBox = document.getElementById('search-box');
 
-		searchBox.addEventListener('submit', (e) => {
-			e.preventDefault();
-		});
-
-		btn.addEventListener('click', () => {
-			input.value = input.value.trim();
-			if (input.value !== '') {
-				this.loading(true);
-				Logic.grabDataByCity(this.selectUnits(), input.value)
-					.then(() => {
-						this.loading(false);
-						input.value = '';
-					})
-					.catch(() => {
-						this.loading(false);
-						input.value = '';
-					});
-			}
-		});
+		input.value = input.value.trim();
+		if (input.value !== '') {
+			this.loading(true);
+			Logic.grabDataByCity(this.setUnit(), input.value)
+				.then(() => {
+					this.loading(false);
+					input.value = '';
+				})
+				.catch(() => {
+					this.loading(false);
+					input.value = '';
+				});
+		}
 	}
 
 	static async findMe() {
@@ -74,7 +62,8 @@ export default class UI {
 			});
 			const { latitude } = position.coords;
 			const { longitude } = position.coords;
-			Logic.grabDataByPosition(this.selectUnits(), latitude, longitude);
+
+			Logic.grabDataByPosition(this.setUnit(), latitude, longitude);
 			return position;
 		} catch (error) {
 			console.error(error);
@@ -82,15 +71,21 @@ export default class UI {
 		}
 	}
 
-	static eventListeners() {
+	static attachListeners() {
+		const sampleLocations = document.querySelector('#sample-locations');
+		const unitsBtn = document.querySelector('#change-units');
+		const searchBox = document.querySelector('#search-box');
+		const searchBtn = document.querySelector('#search-btn');
 		const findBtn = document.querySelector('#find-btn');
+
+		sampleLocations.addEventListener('click', (e) => this.pickCity(e));
+		searchBox.addEventListener('submit', (e) => e.preventDefault());
+		searchBtn.addEventListener('click', () => this.searchCity());
 		findBtn.addEventListener('click', () => this.findMe());
+		unitsBtn.addEventListener('click', () => this.toggleUnit(unitsBtn));
 	}
 
 	static startApp() {
-		this.pickCity();
-		this.selectUnits();
-		this.searchCity();
-		this.eventListeners();
+		this.attachListeners();
 	}
 }
