@@ -2,20 +2,21 @@ import Logic from './logic';
 
 export default class UI {
 	static setUnit(system) {
-		const unitsBtn = document.querySelector('#change-units');
-		const systemUnits = unitsBtn.value || system || 'metric';
-		this.updateUnitBtn(unitsBtn, systemUnits);
+		const unitBtn = document.querySelector('#change-units');
+		const systemUnits = unitBtn.value || system || 'metric';
+		this.updateUnitBtn(unitBtn, systemUnits);
 		return systemUnits;
 	}
 
-	static updateUnitBtn(unitsBtn, systemUnits) {
-		unitsBtn.value = systemUnits;
-		unitsBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
+	static updateUnitBtn(unitBtn, systemUnits) {
+		const newunitBtn = unitBtn;
+		newunitBtn.value = systemUnits;
+		newunitBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
 	}
 
-	static toggleUnit(unitsBtn) {
-		const systemUnits = unitsBtn.innerHTML.includes('<b>°C</b>') ? 'imperial' : 'metric';
-		this.updateUnitBtn(unitsBtn, systemUnits);
+	static toggleUnit(unitBtn) {
+		const systemUnits = unitBtn.innerHTML.includes('<b>°C</b>') ? 'imperial' : 'metric';
+		this.updateUnitBtn(unitBtn, systemUnits);
 	}
 
 	static loading(toggle) {
@@ -73,7 +74,7 @@ export default class UI {
 
 	static attachListeners() {
 		const sampleLocations = document.querySelector('#sample-locations');
-		const unitsBtn = document.querySelector('#change-units');
+		const unitBtn = document.querySelector('#change-units');
 		const searchBox = document.querySelector('#search-box');
 		const searchBtn = document.querySelector('#search-btn');
 		const findBtn = document.querySelector('#find-btn');
@@ -82,7 +83,7 @@ export default class UI {
 		searchBox.addEventListener('submit', (e) => e.preventDefault());
 		searchBtn.addEventListener('click', () => this.searchCity());
 		findBtn.addEventListener('click', () => this.findMe());
-		unitsBtn.addEventListener('click', () => this.toggleUnit(unitsBtn));
+		unitBtn.addEventListener('click', () => this.toggleUnit(unitBtn));
 	}
 
 	static startApp() {
