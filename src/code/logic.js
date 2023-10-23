@@ -27,7 +27,7 @@ export default class Logic {
 		const {
 			name: city,
 			sys: { country },
-			weather: [{ main: weather, description }],
+			weather: [{ main: weather, description, icon }],
 			wind: { speed: windSpeed },
 			main: { temp, feels_like: feelsLike, pressure, humidity },
 		} = data;
@@ -37,7 +37,7 @@ export default class Logic {
 		const pressureUnit = `${pressure} hPa`;
 		const humidityPercent = `${humidity}%`;
 
-		return { city, country, weather, description, windSpeedUnit, temperature, feelsLikeTemp, pressureUnit, humidityPercent };
+		return { city, country, icon, temperature, feelsLikeTemp, humidityPercent, windSpeedUnit, pressureUnit, description, weather };
 	}
 
 	static async grabDataByCity(system, city) {
@@ -58,7 +58,6 @@ export default class Logic {
 			if (!response.ok) throw new Error(`City '${city}' not found`);
 			const data = this.extractData(await response.json(), system);
 
-			console.log(data);
 			return data;
 		} catch (error) {
 			alert(error);

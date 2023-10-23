@@ -23,17 +23,19 @@ export default class UI {
 		const cog = document.querySelector('i.fa-cog');
 
 		if (toggle) {
-			cog.classList.add('visible');
+			cog.classList.add('show');
 		} else {
-			cog.classList.remove('visible');
+			cog.classList.remove('show');
 		}
 	}
 
 	static pickCity(e) {
 		this.loading(true);
 		if (e.target.classList.contains('btn')) {
-			Logic.grabDataByCity(this.setUnit(), e.target.textContent).then(() => {
+			Logic.grabDataByCity(this.setUnit(), e.target.textContent).then((data) => {
 				this.loading(false);
+				this.clearWeather();
+				this.displayWeather(data);
 			});
 		}
 	}
@@ -45,18 +47,23 @@ export default class UI {
 		if (input.value !== '') {
 			this.loading(true);
 			Logic.grabDataByCity(this.setUnit(), input.value)
-				.then(() => {
+				.then((data) => {
 					this.loading(false);
 					input.value = '';
+					this.clearWeather();
+					this.displayWeather(data);
 				})
+
 				.catch(() => {
 					this.loading(false);
 					input.value = '';
+					this.clearWeather();
 				});
 		}
 	}
 
 	static async findMe() {
+		this.loading(true);
 		try {
 			const position = await new Promise((resolve, reject) => {
 				navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -64,12 +71,75 @@ export default class UI {
 			const { latitude } = position.coords;
 			const { longitude } = position.coords;
 
-			Logic.grabDataByPosition(this.setUnit(), latitude, longitude);
+			Logic.grabDataByPosition(this.setUnit(), latitude, longitude).then((data) => {
+				this.loading(false);
+				this.clearWeather();
+				this.displayWeather(data);
+			});
+
 			return position;
 		} catch (error) {
 			console.error(error);
 			return null;
 		}
+	}
+
+	static clearWeather() {
+		const imgCard = document.querySelector('#img-card');
+		const mainCard = document.querySelector('#main-card');
+		const secondaryCard = document.querySelector('#secondary-card');
+
+		imgCard.textContent = '';
+		mainCard.textContent = '';
+		secondaryCard.textContent = '';
+	}
+
+	static displayWeather(data) {
+		const weather = document.querySelector('#weather');
+
+		const imgCard = document.querySelector('#img-card');
+		const mainCard = document.querySelector('#main-card');
+		const secondaryCard = document.querySelector('#secondary-card');
+
+		const img = document.createElement('img');
+		img.src = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
+		img.alt = data.description;
+
+		const h1CityCountry = document.createElement('h1');
+		const h1Temperature = document.createElement('h1');
+		const h1Description = document.createElement('h1');
+
+		const pFeelsLikeTemp = document.createElement('p');
+		const pHumidityPercent = document.createElement('p');
+		const pWindSpeedUnit = document.createElement('p');
+		const pPressureUnit = document.createElement('p');
+
+		if (data.country !== undefined) {
+			h1CityCountry.textContent = `${data.city}, ${data.country}`;
+		} else {
+			h1CityCountry.textContent = `${data.city}`;
+		}
+
+		h1Temperature.textContent = `${data.temperature}`;
+		h1Description.textContent = `${data.description}`;
+		pFeelsLikeTemp.textContent = `Feels like: ${data.feelsLikeTemp}`;
+		pHumidityPercent.textContent = `Humidity: ${data.humidityPercent}`;
+		pWindSpeedUnit.textContent = `Wind speed: ${data.windSpeedUnit}`;
+		pPressureUnit.textContent = `Pressure: ${data.pressureUnit}`;
+
+		imgCard.appendChild(img);
+
+		mainCard.appendChild(h1CityCountry);
+		mainCard.appendChild(h1Temperature);
+		mainCard.appendChild(h1Description);
+
+		secondaryCard.appendChild(pFeelsLikeTemp);
+		secondaryCard.appendChild(pHumidityPercent);
+		secondaryCard.appendChild(pWindSpeedUnit);
+		secondaryCard.appendChild(pPressureUnit);
+
+		weather.appendChild(mainCard);
+		weather.appendChild(secondaryCard);
 	}
 
 	static attachListeners() {
@@ -86,7 +156,7 @@ export default class UI {
 		unitBtn.addEventListener('click', () => this.toggleUnit(unitBtn));
 	}
 
-	static startApp() {
+	static runApp() {
 		this.attachListeners();
 	}
 }

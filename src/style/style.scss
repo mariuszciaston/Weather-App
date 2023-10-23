@@ -1,8 +1,46 @@
-.fa-cog {
-	opacity: 0.5;
-	visibility: hidden;
-}
+html {
+	background-color: white;
+	color: black;
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
 
-.visible {
-	visibility: visible;
+	body {
+		// #sample-locations {
+		// 	// background-color: brown;
+		// }
+
+		// #search-box {
+		// 	// background-color: blueviolet;
+		// }
+
+		#weather {
+			// background-color: cadetblue;
+
+			.fa-cog {
+				display: none;
+			}
+
+			.show {
+				display: inline-block;
+			}
+
+			#img-card {
+				// background-color: pink;
+			}
+
+			#img-card img {
+				width: 100px;
+				height: 100px;
+			}
+
+			// #main-card {
+			// 	// background-color: yellow;
+			// }
+
+			// #secondary-card {
+			// 	// background-color: lightcoral;
+			// }
+		}
+	}
 }
