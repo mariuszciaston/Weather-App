@@ -20,7 +20,7 @@ export default class UI {
 	}
 
 	static loading(toggle) {
-		const cog = document.querySelector('i.fa-cog');
+		const cog = document.querySelector('#loading-spinner i.fa-cog');
 
 		if (toggle) {
 			cog.classList.add('show');
@@ -30,12 +30,14 @@ export default class UI {
 	}
 
 	static pickCity(e) {
+		this.clearWeather();
 		this.loading(true);
 		if (e.target.classList.contains('btn')) {
 			Logic.grabDataByCity(this.setUnit(), e.target.textContent).then((data) => {
 				this.loading(false);
 				this.clearWeather();
 				this.displayWeather(data);
+				this.setBcgColor(data);
 			});
 		}
 	}
@@ -45,6 +47,7 @@ export default class UI {
 
 		input.value = input.value.trim();
 		if (input.value !== '') {
+			this.clearWeather();
 			this.loading(true);
 			Logic.grabDataByCity(this.setUnit(), input.value)
 				.then((data) => {
@@ -52,17 +55,17 @@ export default class UI {
 					input.value = '';
 					this.clearWeather();
 					this.displayWeather(data);
+					this.setBcgColor(data);
 				})
-
 				.catch(() => {
 					this.loading(false);
 					input.value = '';
-					this.clearWeather();
 				});
 		}
 	}
 
 	static async findMe() {
+		this.clearWeather();
 		this.loading(true);
 		try {
 			const position = await new Promise((resolve, reject) => {
@@ -75,6 +78,7 @@ export default class UI {
 				this.loading(false);
 				this.clearWeather();
 				this.displayWeather(data);
+				this.setBcgColor(data);
 			});
 
 			return position;
@@ -142,6 +146,28 @@ export default class UI {
 		weather.appendChild(secondaryCard);
 	}
 
+	static setBcgColor(data) {
+		let temp = parseInt(data.temperature, 10);
+		const minTemp = 0;
+		const maxTemp = 30;
+
+		const minHsl = 220;
+		const maxHsl = 0;
+
+		temp = temp > maxTemp ? maxTemp : temp;
+		temp = temp < minTemp ? minTemp : temp;
+
+		const rangeTemp = maxTemp - minTemp;
+		const rangeHsl = maxHsl - minHsl;
+		const degCount = maxTemp - temp;
+		const hslsDeg = rangeHsl / rangeTemp;
+		const returnHue = 360 - (degCount * hslsDeg - (maxHsl - 360));
+
+		const color = `hsl(${returnHue}, 100%, 75%)`;
+
+		document.body.style.backgroundColor = color;
+	}
+
 	static attachListeners() {
 		const sampleLocations = document.querySelector('#sample-locations');
 		const unitBtn = document.querySelector('#change-units');
@@ -158,5 +184,7 @@ export default class UI {
 
 	static runApp() {
 		this.attachListeners();
+
+		this.findMe();
 	}
 }

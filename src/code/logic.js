@@ -77,7 +77,7 @@ export default class Logic {
 					} catch (error) {
 						reject(error);
 					}
-				}, 1000);
+				}, 0);
 			});
 
 			if (!response.ok) throw new Error(`Localization not found`);
