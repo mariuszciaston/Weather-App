@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
@@ -13,33 +16,45 @@
 </head>
 
 <body>
-    <div id="sample-locations">
-        <button class="btn" type="button">New York, USA</button>
-        <button class="btn" type="button">Buenos Aires, Argentina</button>
-        <button class="btn" type="button">Reykjavík, Island</button>
-        <button class="btn" type="button">Warsaw, Poland</button>
-        <button class="btn" type="button">Naples, Italy</button>
-        <button class="btn" type="button">Johannesburg, South Africa</button>
-        <button class="btn" type="button">New Delhi, India</button>
-        <button class="btn" type="button">Tokyo, Japan</button>
-        <button class="btn" type="button">Sydney, Australia</button>
-        <button class="btn" type="button">Antarctica</button>
-    </div>
-    <form id="search-box">
-        <button id="change-units" class="btn" type="button"><b>°C</b> | °F</button>
-        <input id="search-input" type="text" required>
-        <button id="search-btn" type="submit">Search</button>
-        <button id="find-btn" type="button">
-            <div class="fa-2x"><i class="fa-solid fa-location-crosshairs"></i></div>
-        </button>
-    </form>
-    <div id="weather">
-        <i class="fa-3x fa-solid fa-cog fa-spin"></i>
-        <div id="img-card">
+    <div id="wrapper">
+        <div id="top-section">
+            <div id="title-box">
+                <h1 id="title"> Weather App</h1>
+            </div>
+            <form id="search-box">
+                <button id="change-units" class="btn" type="button"><b>°C</b> | °F</button>
+                <button id="find-btn" type="button">
+                    <div class="fa-2x"><i class="fa-solid fa-location-crosshairs"></i></div>
+                </button>
+                <input id="search-input" type="text" required>
+                <button id="search-btn" type="submit">Search</button>
+            </form>
         </div>
-        <div id="main-card">
+        <div id="loading-spinner">
+            <i class="fa-10x fa-solid fa-cog fa-spin"></i>
         </div>
-        <div id="secondary-card">
+        <div id="weather" class="hide">
+            <div id="img-card">
+            </div>
+            <div id="main-card">
+            </div>
+            <div id="secondary-card">
+            </div>
+        </div>
+        <div id="bottom-section">
+            <div id="sample-locations">
+                <button class="btn" type="button">New York, USA</button>
+                <button class="btn" type="button">Buenos Aires, Argentina</button>
+                <button class="btn" type="button">Reykjavík, Island</button>
+                <button class="btn" type="button">Warsaw, Poland</button>
+                <button class="btn" type="button">Naples, Italy</button>
+                <button class="btn" type="button">Dallol, Ethiopia</button>
+                <button class="btn" type="button">New Delhi, India</button>
+                <button class="btn" type="button">Tokyo, Japan</button>
+                <button class="btn" type="button">Sydney, Australia</button>
+                <button class="btn" type="button">Antarctica</button>
+            </div>
+            <div>Footer</div>
         </div>
     </div>
 </body>
