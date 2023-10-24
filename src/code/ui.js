@@ -20,12 +20,15 @@ export default class UI {
 	}
 
 	static loading(toggle) {
-		const cog = document.querySelector('#loading-spinner i.fa-cog');
+		const spinner = document.querySelector('#loading-spinner');
+		const weather = document.querySelector('#weather');
 
 		if (toggle) {
-			cog.classList.add('show');
+			weather.classList.add('hide');
+			spinner.classList.add('show');
 		} else {
-			cog.classList.remove('show');
+			spinner.classList.remove('show');
+			weather.classList.remove('hide');
 		}
 	}
 
