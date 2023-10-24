@@ -1,46 +1,101 @@
 html {
 	background-color: white;
+	background-color: hsla(0, 0%, 75%);
 	color: black;
 	font-size: 16px;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
+	height: 100%;
 
 	body {
-		// #sample-locations {
-		// 	// background-color: brown;
-		// }
+		min-height: 100%;
+		transition: 1s background-color;
+		display: flex;
+		justify-content: center;
 
-		// #search-box {
-		// 	// background-color: blueviolet;
-		// }
+		#wrapper {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 2rem;
+			gap: 1rem;
+			max-width: 1024px;
 
-		#weather {
-			// background-color: cadetblue;
+			#title {
+				font-weight: 100;
+				font-size: xxx-large;
+			}
 
-			.fa-cog {
+			#sample-locations {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+
+				.btn {
+					flex: 1;
+					min-width: 6rem;
+					min-height: 4rem;
+				}
+			}
+
+			#search-box {
+				display: flex;
+				flex-wrap: wrap;
+			}
+
+			#loading-spinner {
+				justify-content: center;
 				display: none;
+
+				.fa-cog {
+					color: black;
+					opacity: 0.25;
+				}
 			}
 
 			.show {
-				display: inline-block;
+				display: flex !important;
 			}
 
-			#img-card {
-				// background-color: pink;
+			#weather {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1rem;
+				justify-content: center;
+
+				#img-card,
+				#main-card,
+				#secondary-card {
+					display: flex;
+					flex: 1;
+					flex-basis: 256px;
+					flex-grow: 0;
+					aspect-ratio: 1 / 1;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					text-align: center;
+					border-radius: 1rem;
+					padding: 2rem;
+
+					background-color: hsla(0, 0%, 100%, 0.5);
+					color: black;
+
+					box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+				}
+
+				#img-card {
+					img {
+						width: 100px;
+						height: 100px;
+						visibility: hidden;
+					}
+				}
 			}
 
-			#img-card img {
-				width: 100px;
-				height: 100px;
+			.hide {
+				display: none !important;
 			}
-
-			// #main-card {
-			// 	// background-color: yellow;
-			// }
-
-			// #secondary-card {
-			// 	// background-color: lightcoral;
-			// }
 		}
 	}
 }
