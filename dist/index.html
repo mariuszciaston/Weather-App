@@ -18,43 +18,47 @@
 <body>
     <div id="wrapper">
         <div id="top-section">
-            <div id="title-box">
-                <h1 id="title"> Weather App</h1>
-            </div>
-            <form id="search-box">
+            <header id="title-box">
+                <h1 id="title">Weather App</h1>
+            </header>
+            <nav id="navigation">
                 <button id="change-units" class="btn" type="button"><b>°C</b> | °F</button>
-                <button id="find-btn" type="button">
-                    <div class="fa-2x"><i class="fa-solid fa-location-crosshairs"></i></div>
+                <form id="search-box">
+                    <input id="search-input" type="text" required>
+                    <button id="search-btn" class="btn" type="submit">Search</button>
+                </form>
+                <button id="find-btn" class="btn" type="button">
+                    <i class="fa-2x fa-solid fa-location-crosshairs"></i>
                 </button>
-                <input id="search-input" type="text" required>
-                <button id="search-btn" type="submit">Search</button>
-            </form>
+            </nav>
         </div>
-        <div id="loading-spinner">
+        <div id="loading-spinner" class="hide">
             <i class="fa-10x fa-solid fa-cog fa-spin"></i>
         </div>
-        <div id="weather" class="hide">
+        <main id="weather-container" class="hide">
             <div id="img-card">
             </div>
             <div id="main-card">
             </div>
             <div id="secondary-card">
             </div>
-        </div>
+        </main>
         <div id="bottom-section">
-            <div id="sample-locations">
-                <button class="btn" type="button">New York, USA</button>
-                <button class="btn" type="button">Buenos Aires, Argentina</button>
-                <button class="btn" type="button">Reykjavík, Island</button>
-                <button class="btn" type="button">Warsaw, Poland</button>
-                <button class="btn" type="button">Naples, Italy</button>
-                <button class="btn" type="button">Dallol, Ethiopia</button>
-                <button class="btn" type="button">New Delhi, India</button>
-                <button class="btn" type="button">Tokyo, Japan</button>
-                <button class="btn" type="button">Sydney, Australia</button>
+            <nav id="sample-locations">
                 <button class="btn" type="button">Antarctica</button>
-            </div>
-            <div>Footer</div>
+                <button class="btn" type="button">New York,<br>USA</button>
+                <button class="btn" type="button">Warsaw,<br>Poland</button>
+                <button class="btn" type="button">Tokyo,<br>Japan</button>
+                <button class="btn" type="button">Naples,<br>Italy</button>
+                <button class="btn" type="button">New Delhi,<br>India</button>
+                <button class="btn" type="button">Bangkok,<br>Thailand</button>
+                <button class="btn" type="button">Dallol,<br>Ethiopia</button>
+            </nav>
+            <footer id="footer">
+                <span id="signature">Mariusz Ciastoń 2023 &nbsp;
+                    <a href="https://github.com/mariuszciaston/" target="_blank" rel="noopener"><i class="fab fa-github fa-2x" aria-hidden="true"></i></a>
+                </span>
+            </footer>
         </div>
     </div>
 </body>
