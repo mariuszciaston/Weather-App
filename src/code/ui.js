@@ -21,13 +21,13 @@ export default class UI {
 
 	static loading(toggle) {
 		const spinner = document.querySelector('#loading-spinner');
-		const weather = document.querySelector('#weather');
+		const weather = document.querySelector('#weather-container');
 
 		if (toggle) {
 			weather.classList.add('hide');
-			spinner.classList.add('show');
+			spinner.classList.remove('hide');
 		} else {
-			spinner.classList.remove('show');
+			spinner.classList.add('hide');
 			weather.classList.remove('hide');
 		}
 	}
@@ -102,8 +102,7 @@ export default class UI {
 	}
 
 	static displayWeather(data) {
-		const weather = document.querySelector('#weather');
-
+		const weather = document.querySelector('#weather-container');
 		const imgCard = document.querySelector('#img-card');
 		const mainCard = document.querySelector('#main-card');
 		const secondaryCard = document.querySelector('#secondary-card');
