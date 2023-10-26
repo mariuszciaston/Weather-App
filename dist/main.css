@@ -481,10 +481,10 @@ html body #wrapper #weather-container #main-card #temperature {
 html body #wrapper #weather-container #secondary-card p {
   font-weight: 500;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 300;
 }
 html body #wrapper #weather-container #secondary-card p span {
-  font-weight: 300;
+  font-weight: 700;
 }
 html body #wrapper #bottom-section #sample-locations {
   display: grid;

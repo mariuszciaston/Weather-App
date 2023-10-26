@@ -33,28 +33,15 @@ export default class UI {
 		return temp;
 	}
 
-	static convertFeelsLike(feelsLike, systemUnits) {
-		let feelsLikeNumber = parseFloat(feelsLike.split(':')[1]);
-		if (systemUnits === 'imperial' && feelsLike.includes('°C')) {
-			feelsLikeNumber = Math.round((feelsLikeNumber * 9) / 5 + 32);
-			return `Feels like: ${feelsLikeNumber}°F`;
-		}
-		if (systemUnits === 'metric' && feelsLike.includes('°F')) {
-			feelsLikeNumber = Math.round(((feelsLikeNumber - 32) * 5) / 9);
-			return `Feels like: ${feelsLikeNumber}°C`;
-		}
-		return feelsLike;
-	}
-
 	static convertWindSpeed(speed, systemUnits) {
-		let speedNumber = parseFloat(speed.split(':')[1]);
+		let speedNumber = parseFloat(speed);
 		if (systemUnits === 'imperial' && speed.includes('km/h')) {
 			speedNumber = Math.round(speedNumber / 1.6093);
-			return `Wind speed: ${speedNumber} mph`;
+			return `${speedNumber} mph`;
 		}
 		if (systemUnits === 'metric' && speed.includes('mph')) {
 			speedNumber = Math.round(speedNumber * 1.6093);
-			return `Wind speed: ${speedNumber} km/h`;
+			return `${speedNumber} km/h`;
 		}
 		return speed;
 	}
@@ -67,7 +54,7 @@ export default class UI {
 		const feelsLike = feelsLikeElement.textContent;
 		const windSpeed = windSpeedElement.textContent;
 		temperatureElement.textContent = this.convertTemperature(temperature, systemUnits);
-		feelsLikeElement.textContent = this.convertFeelsLike(feelsLike, systemUnits);
+		feelsLikeElement.textContent = this.convertTemperature(feelsLike, systemUnits);
 		windSpeedElement.textContent = this.convertWindSpeed(windSpeed, systemUnits);
 	}
 
@@ -144,94 +131,77 @@ export default class UI {
 	}
 
 	static clearWeather() {
-		const imgCard = document.querySelector('#img-card');
 		const mainCard = document.querySelector('#main-card');
-		const secondaryCard = document.querySelector('#secondary-card');
+		const imgCard = document.querySelector('#img-card');
+		const secondaryCardSpans = document.querySelectorAll('#secondary-card span');
 
-		imgCard.textContent = '';
 		mainCard.textContent = '';
-		secondaryCard.textContent = '';
+		imgCard.textContent = '';
+		secondaryCardSpans.forEach((param) => {
+			const span = param;
+			span.textContent = '';
+		});
 	}
 
-	static displayWeather(data) {
-		const weather = document.querySelector('#weather-container');
-		const imgCard = document.querySelector('#img-card');
+	static displayMainCard(data) {
 		const mainCard = document.querySelector('#main-card');
-		const secondaryCard = document.querySelector('#secondary-card');
 
-		const tommorowCard = document.querySelector('#tommorow-card');
-		const afterTommorowCard = document.querySelector('#after-tommorow-card');
-		const nextAfterTommorowCard = document.querySelector('#next-after-tommorow-card');
+		const cityCountry = document.createElement('h1');
+		const temperature = document.createElement('h1');
+		const description = document.createElement('h1');
 
+		cityCountry.setAttribute('id', 'city-country');
+		temperature.setAttribute('id', 'temperature');
+		description.setAttribute('id', 'description');
+
+		if (data.country !== undefined) {
+			cityCountry.textContent = `${data.city}, ${data.country}`;
+		} else {
+			cityCountry.textContent = `${data.city}`;
+		}
+		temperature.textContent = `${data.temperature}`;
+		description.textContent = `${data.description}`;
+
+		mainCard.appendChild(cityCountry);
+		mainCard.appendChild(temperature);
+		mainCard.appendChild(description);
+	}
+
+	static displayImgCard(data) {
+		const imgCard = document.querySelector('#img-card');
 		const img = document.createElement('img');
 		img.src = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
 		img.alt = data.description;
-
-		const h1CityCountry = document.createElement('h1');
-		const h1Temperature = document.createElement('h1');
-		const h1Description = document.createElement('h1');
-
-		const pFeelsLikeTemp = document.createElement('p');
-		const pHumidityPercent = document.createElement('p');
-		const pWindSpeedUnit = document.createElement('p');
-		const pPressureUnit = document.createElement('p');
-
-		if (data.country !== undefined) {
-			h1CityCountry.textContent = `${data.city}, ${data.country}`;
-		} else {
-			h1CityCountry.textContent = `${data.city}`;
-		}
-
-		h1Temperature.textContent = `${data.temperature}`;
-		h1Description.textContent = `${data.description}`;
-
-		let spanElement = document.createElement('span');
-		spanElement.textContent = 'Feels like:';
-		pFeelsLikeTemp.appendChild(spanElement);
-		pFeelsLikeTemp.append(` ${data.feelsLikeTemp}`);
-
-		spanElement = document.createElement('span');
-		spanElement.textContent = 'Humidity:';
-		pHumidityPercent.appendChild(spanElement);
-		pHumidityPercent.append(` ${data.humidityPercent}`);
-
-		spanElement = document.createElement('span');
-		spanElement.textContent = 'Wind speed:';
-		pWindSpeedUnit.appendChild(spanElement);
-		pWindSpeedUnit.append(` ${data.windSpeedUnit}`);
-
-		spanElement = document.createElement('span');
-		spanElement.textContent = 'Pressure:';
-		pPressureUnit.appendChild(spanElement);
-		pPressureUnit.append(` ${data.pressureUnit}`);
-
-		h1CityCountry.setAttribute('id', 'city-country');
-		h1Temperature.setAttribute('id', 'temperature');
-		h1Description.setAttribute('id', 'description');
-
-		pFeelsLikeTemp.setAttribute('id', 'feels-like');
-		pHumidityPercent.setAttribute('id', 'humidity');
-		pWindSpeedUnit.setAttribute('id', 'wind-speed');
-		pPressureUnit.setAttribute('id', 'pressure');
-
 		imgCard.appendChild(img);
+	}
 
-		mainCard.appendChild(h1CityCountry);
-		mainCard.appendChild(h1Temperature);
-		mainCard.appendChild(h1Description);
+	static displaySecondaryCard(data) {
+		const feelsLike = document.querySelector('#feels-like');
+		const humidity = document.querySelector('#humidity');
+		const windSpeed = document.querySelector('#wind-speed');
+		const pressure = document.querySelector('#pressure');
 
-		secondaryCard.appendChild(pFeelsLikeTemp);
-		secondaryCard.appendChild(pHumidityPercent);
-		secondaryCard.appendChild(pWindSpeedUnit);
-		secondaryCard.appendChild(pPressureUnit);
+		feelsLike.append(` ${data.feelsLikeTemp}`);
+		humidity.append(` ${data.humidityPercent}`);
+		windSpeed.append(` ${data.windSpeedUnit}`);
+		pressure.append(` ${data.pressureUnit}`);
+	}
 
-		weather.appendChild(mainCard);
-		weather.appendChild(imgCard);
-		weather.appendChild(secondaryCard);
+	// static displayTommorowCard(data) {
+	// const tommorowCard = document.querySelector('#tommorow-card');
+	// const afterTommorowCard = document.querySelector('#after-tommorow-card');
+	// const nextAfterTommorowCard = document.querySelector('#next-after-tommorow-card');
 
-		weather.appendChild(tommorowCard);
-		weather.appendChild(afterTommorowCard);
-		weather.appendChild(nextAfterTommorowCard);
+	// weather.appendChild(tommorowCard);
+	// weather.appendChild(afterTommorowCard);
+	// weather.appendChild(nextAfterTommorowCard);
+	// }
+
+	static displayWeather(data) {
+		this.displayMainCard(data);
+		this.displayImgCard(data);
+		this.displaySecondaryCard(data);
+		// this.displayTommorowCard(data);
 	}
 
 	static setBcgColor(data) {
