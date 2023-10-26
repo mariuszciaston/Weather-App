@@ -17,6 +17,58 @@ export default class UI {
 	static toggleUnit(unitBtn) {
 		const systemUnits = unitBtn.innerHTML.includes('<b>°C</b>') ? 'imperial' : 'metric';
 		this.updateUnitBtn(unitBtn, systemUnits);
+		this.replaceUnits(systemUnits);
+	}
+
+	static convertTemperature(temp, systemUnits) {
+		let tempNumber = parseFloat(temp);
+		if (systemUnits === 'imperial' && temp.includes('°C')) {
+			tempNumber = Math.round((tempNumber * 9) / 5 + 32);
+			return `${tempNumber}°F`;
+		}
+		if (systemUnits === 'metric' && temp.includes('°F')) {
+			tempNumber = Math.round(((tempNumber - 32) * 5) / 9);
+			return `${tempNumber}°C`;
+		}
+		return temp;
+	}
+
+	static convertFeelsLike(feelsLike, systemUnits) {
+		let feelsLikeNumber = parseFloat(feelsLike.split(':')[1]);
+		if (systemUnits === 'imperial' && feelsLike.includes('°C')) {
+			feelsLikeNumber = Math.round((feelsLikeNumber * 9) / 5 + 32);
+			return `Feels like: ${feelsLikeNumber}°F`;
+		}
+		if (systemUnits === 'metric' && feelsLike.includes('°F')) {
+			feelsLikeNumber = Math.round(((feelsLikeNumber - 32) * 5) / 9);
+			return `Feels like: ${feelsLikeNumber}°C`;
+		}
+		return feelsLike;
+	}
+
+	static convertWindSpeed(speed, systemUnits) {
+		let speedNumber = parseFloat(speed.split(':')[1]);
+		if (systemUnits === 'imperial' && speed.includes('km/h')) {
+			speedNumber = Math.round(speedNumber / 1.6093);
+			return `Wind speed: ${speedNumber} mph`;
+		}
+		if (systemUnits === 'metric' && speed.includes('mph')) {
+			speedNumber = Math.round(speedNumber * 1.6093);
+			return `Wind speed: ${speedNumber} km/h`;
+		}
+		return speed;
+	}
+
+	static replaceUnits(systemUnits) {
+		const temperatureElement = document.querySelector('#main-card #temperature');
+		const feelsLikeElement = document.querySelector('#secondary-card #feels-like');
+		const windSpeedElement = document.querySelector('#secondary-card #wind-speed');
+		const temperature = temperatureElement.textContent;
+		const feelsLike = feelsLikeElement.textContent;
+		const windSpeed = windSpeedElement.textContent;
+		temperatureElement.textContent = this.convertTemperature(temperature, systemUnits);
+		feelsLikeElement.textContent = this.convertFeelsLike(feelsLike, systemUnits);
+		windSpeedElement.textContent = this.convertWindSpeed(windSpeed, systemUnits);
 	}
 
 	static loading(toggle) {
@@ -107,6 +159,10 @@ export default class UI {
 		const mainCard = document.querySelector('#main-card');
 		const secondaryCard = document.querySelector('#secondary-card');
 
+		const tommorowCard = document.querySelector('#tommorow-card');
+		const afterTommorowCard = document.querySelector('#after-tommorow-card');
+		const nextAfterTommorowCard = document.querySelector('#next-after-tommorow-card');
+
 		const img = document.createElement('img');
 		img.src = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
 		img.alt = data.description;
@@ -128,10 +184,35 @@ export default class UI {
 
 		h1Temperature.textContent = `${data.temperature}`;
 		h1Description.textContent = `${data.description}`;
-		pFeelsLikeTemp.textContent = `Feels like: ${data.feelsLikeTemp}`;
-		pHumidityPercent.textContent = `Humidity: ${data.humidityPercent}`;
-		pWindSpeedUnit.textContent = `Wind speed: ${data.windSpeedUnit}`;
-		pPressureUnit.textContent = `Pressure: ${data.pressureUnit}`;
+
+		let spanElement = document.createElement('span');
+		spanElement.textContent = 'Feels like:';
+		pFeelsLikeTemp.appendChild(spanElement);
+		pFeelsLikeTemp.append(` ${data.feelsLikeTemp}`);
+
+		spanElement = document.createElement('span');
+		spanElement.textContent = 'Humidity:';
+		pHumidityPercent.appendChild(spanElement);
+		pHumidityPercent.append(` ${data.humidityPercent}`);
+
+		spanElement = document.createElement('span');
+		spanElement.textContent = 'Wind speed:';
+		pWindSpeedUnit.appendChild(spanElement);
+		pWindSpeedUnit.append(` ${data.windSpeedUnit}`);
+
+		spanElement = document.createElement('span');
+		spanElement.textContent = 'Pressure:';
+		pPressureUnit.appendChild(spanElement);
+		pPressureUnit.append(` ${data.pressureUnit}`);
+
+		h1CityCountry.setAttribute('id', 'city-country');
+		h1Temperature.setAttribute('id', 'temperature');
+		h1Description.setAttribute('id', 'description');
+
+		pFeelsLikeTemp.setAttribute('id', 'feels-like');
+		pHumidityPercent.setAttribute('id', 'humidity');
+		pWindSpeedUnit.setAttribute('id', 'wind-speed');
+		pPressureUnit.setAttribute('id', 'pressure');
 
 		imgCard.appendChild(img);
 
@@ -145,7 +226,12 @@ export default class UI {
 		secondaryCard.appendChild(pPressureUnit);
 
 		weather.appendChild(mainCard);
+		weather.appendChild(imgCard);
 		weather.appendChild(secondaryCard);
+
+		weather.appendChild(tommorowCard);
+		weather.appendChild(afterTommorowCard);
+		weather.appendChild(nextAfterTommorowCard);
 	}
 
 	static setBcgColor(data) {
@@ -166,7 +252,6 @@ export default class UI {
 		const returnHue = 360 - (degCount * hslsDeg - (maxHsl - 360));
 
 		const color = `hsl(${returnHue}, 100%, 75%)`;
-
 		document.body.style.backgroundColor = color;
 	}
 
