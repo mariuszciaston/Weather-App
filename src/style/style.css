@@ -9,7 +9,7 @@ html {
 }
 html body {
   min-height: 100%;
-  transition: 1s background-color;
+  transition: 2s background-color;
   display: flex;
   justify-content: center;
 }
@@ -45,13 +45,13 @@ html body #wrapper #top-section #navigation .btn {
 html body #wrapper #top-section #navigation #change-units {
   white-space: nowrap;
   order: -1;
+  min-width: 3.801875rem;
 }
 html body #wrapper #top-section #navigation #search-box {
   display: flex;
   flex-wrap: nowrap;
   flex: 1;
   justify-content: center;
-  flex-basis: 100%;
 }
 html body #wrapper #top-section #navigation #search-box #search-input {
   border: solid black 0.0625rem;
@@ -68,9 +68,11 @@ html body #wrapper #top-section #navigation #search-box #search-btn {
   border-left: 0;
   min-width: 0;
   flex: none;
+  min-width: 3.801875rem;
 }
 html body #wrapper #top-section #navigation #find-btn {
   order: -1;
+  min-width: 3.801875rem;
 }
 html body #wrapper #loading-spinner {
   justify-content: center;
@@ -94,7 +96,10 @@ html body #wrapper #weather-container #img-card img {
 }
 html body #wrapper #weather-container #img-card,
 html body #wrapper #weather-container #main-card,
-html body #wrapper #weather-container #secondary-card {
+html body #wrapper #weather-container #secondary-card,
+html body #wrapper #weather-container #tommorow-card,
+html body #wrapper #weather-container #after-tommorow-card,
+html body #wrapper #weather-container #next-after-tommorow-card {
   flex: 1;
   flex-basis: 100%;
   display: flex;
@@ -109,12 +114,21 @@ html body #wrapper #weather-container #secondary-card {
   border: solid 0.0625rem white;
 }
 html body #wrapper #weather-container #main-card h1 {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 2rem;
+}
+html body #wrapper #weather-container #main-card #temperature {
+  font-weight: 700;
+  font-size: 4rem;
+  margin: 0;
 }
 html body #wrapper #weather-container #secondary-card p {
   font-weight: 500;
   font-size: 1.25rem;
+  font-weight: 700;
+}
+html body #wrapper #weather-container #secondary-card p span {
+  font-weight: 300;
 }
 html body #wrapper #bottom-section #sample-locations {
   display: grid;
@@ -163,6 +177,10 @@ html body #wrapper .hide {
   display: none !important;
 }
 
+#change-units b {
+  font-weight: 900;
+}
+
 @media only screen and (min-width: 30rem) {
   html body #wrapper #top-section #navigation {
     flex-wrap: nowrap;
@@ -173,15 +191,19 @@ html body #wrapper .hide {
   html body #wrapper #top-section #navigation #change-units {
     order: unset;
   }
-  html body #wrapper #top-section #navigation #search-box #search-input {
-    flex: 0.33;
+  html body #wrapper #top-section #navigation #search-box {
+    flex: 0;
+    flex-basis: 19.333125rem;
   }
   html body #wrapper #top-section #navigation #find-btn {
     order: unset;
   }
   html body #wrapper #weather-container #img-card,
   html body #wrapper #weather-container #main-card,
-  html body #wrapper #weather-container #secondary-card {
+  html body #wrapper #weather-container #secondary-card,
+  html body #wrapper #weather-container #tommorow-card,
+  html body #wrapper #weather-container #after-tommorow-card,
+  html body #wrapper #weather-container #next-after-tommorow-card {
     flex: 0 0 17.25rem;
     aspect-ratio: 1/1;
   }

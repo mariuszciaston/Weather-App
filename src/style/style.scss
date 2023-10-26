@@ -9,7 +9,7 @@ html {
 
 	body {
 		min-height: 100%;
-		transition: 1s background-color;
+		transition: 2s background-color;
 		display: flex;
 		justify-content: center;
 
@@ -48,15 +48,13 @@ html {
 					#change-units {
 						white-space: nowrap;
 						order: -1;
+						min-width: 3.801875rem;
 					}
-
 					#search-box {
 						display: flex;
 						flex-wrap: nowrap;
 						flex: 1;
 						justify-content: center;
-						flex-basis: 100%;
-
 						#search-input {
 							border: solid black 0.0625rem;
 							border-radius: 0.25rem;
@@ -72,41 +70,40 @@ html {
 							border-left: 0;
 							min-width: 0;
 							flex: none;
+							min-width: 3.801875rem;
 						}
 					}
-
 					#find-btn {
 						order: -1;
+						min-width: 3.801875rem;
 					}
 				}
 			}
-
 			#loading-spinner {
 				justify-content: center;
 				display: flex;
-
 				.fa-cog {
 					color: black;
 					opacity: 0.25;
 				}
 			}
-
 			#weather-container {
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: center;
 				gap: 1rem;
-
 				#img-card img {
 					width: 12.5rem;
 					height: 12.5rem;
 					aspect-ratio: 1/1;
 					filter: contrast(1.11);
 				}
-
 				#img-card,
 				#main-card,
-				#secondary-card {
+				#secondary-card,
+				#tommorow-card,
+				#after-tommorow-card,
+				#next-after-tommorow-card {
 					flex: 1;
 					flex-basis: 100%;
 					display: flex;
@@ -120,25 +117,30 @@ html {
 					box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.2);
 					border: solid 0.0625rem white;
 				}
-
-				// #img-card {
-				// }
-
 				#main-card {
 					h1 {
-						font-weight: 700;
+						font-weight: 500;
 						font-size: 2rem;
 					}
+					#temperature {
+						font-weight: 700;
+						font-size: 4rem;
+						margin: 0;
+					}
 				}
-
+				// #img-card {
+				// }
 				#secondary-card {
 					p {
 						font-weight: 500;
 						font-size: 1.25rem;
+						font-weight: 700;
+						span {
+							font-weight: 300;
+						}
 					}
 				}
 			}
-
 			#bottom-section {
 				#sample-locations {
 					display: grid;
@@ -151,7 +153,6 @@ html {
 						padding: 0.75rem 0.5rem;
 					}
 				}
-
 				#footer {
 					font-size: 0.875rem;
 					padding: 1rem;
@@ -199,6 +200,10 @@ html {
 	}
 }
 
+#change-units b {
+	font-weight: 900;
+}
+
 @media only screen and (min-width: 30rem) {
 	html {
 		body {
@@ -216,9 +221,10 @@ html {
 							order: unset;
 						}
 						#search-box {
-							#search-input {
-								flex: 0.33;
-							}
+							flex: 0;
+							flex-basis: 19.333125rem;
+							// #search-input {
+							// }
 							// #search-btn {
 							// }
 						}
@@ -236,7 +242,10 @@ html {
 					// }
 					#img-card,
 					#main-card,
-					#secondary-card {
+					#secondary-card,
+					#tommorow-card,
+					#after-tommorow-card,
+					#next-after-tommorow-card {
 						flex: 0 0 17.25rem;
 						aspect-ratio: 1 / 1;
 					}
