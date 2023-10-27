@@ -455,7 +455,7 @@ html body #wrapper #weather-container #main-card,
 html body #wrapper #weather-container #secondary-card,
 html body #wrapper #weather-container #tommorow-card,
 html body #wrapper #weather-container #after-tommorow-card,
-html body #wrapper #weather-container #next-after-tommorow-card {
+html body #wrapper #weather-container #next-card {
   flex: 1;
   flex-basis: 100%;
   display: flex;
@@ -559,7 +559,7 @@ html body #wrapper .hide {
   html body #wrapper #weather-container #secondary-card,
   html body #wrapper #weather-container #tommorow-card,
   html body #wrapper #weather-container #after-tommorow-card,
-  html body #wrapper #weather-container #next-after-tommorow-card {
+  html body #wrapper #weather-container #next-card {
     flex: 0 0 17.25rem;
     aspect-ratio: 1/1;
   }
