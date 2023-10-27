@@ -7,13 +7,15 @@ html {
   font-weight: 400;
   height: 100%;
 }
-html body {
+
+body {
   min-height: 100%;
   transition: 2s background-color;
   display: flex;
   justify-content: center;
 }
-html body #wrapper {
+
+#wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -22,7 +24,8 @@ html body #wrapper {
   max-width: 60rem;
   width: 100%;
 }
-html body #wrapper #top-section #title-box h1 {
+
+#title {
   display: flex;
   justify-content: center;
   text-align: center;
@@ -31,32 +34,36 @@ html body #wrapper #top-section #title-box h1 {
   margin: 0;
   padding: 1rem 0;
 }
-html body #wrapper #top-section #navigation {
+
+#navigation {
   display: flex;
   flex: 1;
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
-html body #wrapper #top-section #navigation .btn {
+#navigation .btn {
   height: 3.083125rem;
   flex: 1;
 }
-html body #wrapper #top-section #navigation #change-units {
+
+#change-units {
   white-space: nowrap;
   order: -1;
   min-width: 3.801875rem;
 }
-html body #wrapper #top-section #navigation .bold {
+#change-units .bold {
   font-weight: 900;
 }
-html body #wrapper #top-section #navigation #search-box {
+
+#search-box {
   display: flex;
   flex-wrap: nowrap;
   flex: 1;
   justify-content: center;
 }
-html body #wrapper #top-section #navigation #search-box #search-input {
+
+#search-input {
   border: solid black 0.0625rem;
   border-radius: 0.25rem;
   border-top-right-radius: 0;
@@ -65,7 +72,8 @@ html body #wrapper #top-section #navigation #search-box #search-input {
   flex: 1;
   z-index: 1;
 }
-html body #wrapper #top-section #navigation #search-box #search-btn {
+
+#search-btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-left: 0;
@@ -73,36 +81,34 @@ html body #wrapper #top-section #navigation #search-box #search-btn {
   flex: none;
   min-width: 3.801875rem;
 }
-html body #wrapper #top-section #navigation #find-btn {
+
+#find-btn {
   order: -1;
   min-width: 3.801875rem;
 }
-html body #wrapper #loading-spinner {
+
+#loading-spinner {
   justify-content: center;
   display: flex;
 }
-html body #wrapper #loading-spinner .fa-cog {
+#loading-spinner .fa-cog {
   color: black;
   opacity: 0.25;
 }
-html body #wrapper #weather-container {
+
+#weather-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
 }
-html body #wrapper #weather-container #img-card img {
-  width: 12.5rem;
-  height: 12.5rem;
-  aspect-ratio: 1/1;
-  filter: contrast(1.11);
-}
-html body #wrapper #weather-container #img-card,
-html body #wrapper #weather-container #main-card,
-html body #wrapper #weather-container #secondary-card,
-html body #wrapper #weather-container #tommorow-card,
-html body #wrapper #weather-container #after-tommorow-card,
-html body #wrapper #weather-container #next-card {
+
+#main-card,
+#img-card,
+#secondary-card,
+#tommorow-card,
+#after-tommorow-card,
+#next-card {
   flex: 1;
   flex-basis: 100%;
   display: flex;
@@ -116,72 +122,94 @@ html body #wrapper #weather-container #next-card {
   box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.2);
   border: solid 0.0625rem white;
 }
-html body #wrapper #weather-container .day {
+
+#main-card h1 {
+  font-weight: 500;
+  font-size: 2rem;
+}
+#main-card #temperature {
+  font-weight: 700;
+  font-size: 4rem;
+  margin: 0;
+}
+
+#img-card img {
+  width: 12.5rem;
+  height: 12.5rem;
+  aspect-ratio: 1/1;
+  filter: contrast(1.11);
+}
+
+#secondary-card p {
+  font-weight: 500;
   font-size: 1.25rem;
   font-weight: 300;
 }
-html body #wrapper #weather-container .temp {
+#secondary-card p span {
+  font-weight: 700;
+}
+
+#tommorow-card .day,
+#after-tommorow-card .day,
+#next-card .day {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+#tommorow-card .temp,
+#after-tommorow-card .temp,
+#next-card .temp {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
   margin-top: 1rem;
   font-size: 2rem;
 }
-html body #wrapper #weather-container .icon {
+#tommorow-card .icon,
+#after-tommorow-card .icon,
+#next-card .icon {
   width: 6.25rem;
   height: 6.25rem;
   aspect-ratio: 1/1;
   filter: contrast(1.11);
 }
-html body #wrapper #weather-container #main-card h1 {
-  font-weight: 500;
-  font-size: 2rem;
-}
-html body #wrapper #weather-container #main-card #temperature {
-  font-weight: 700;
-  font-size: 4rem;
-  margin: 0;
-}
-html body #wrapper #weather-container #secondary-card p {
-  font-weight: 500;
-  font-size: 1.25rem;
-  font-weight: 300;
-}
-html body #wrapper #weather-container #secondary-card p span {
-  font-weight: 700;
-}
-html body #wrapper #bottom-section #sample-locations {
+
+#sample-locations {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(7.0625rem, 1fr));
   gap: 0.5rem;
 }
-html body #wrapper #bottom-section #sample-locations .btn {
+#sample-locations .btn {
   white-space: nowrap;
   line-height: 1.33rem;
   padding: 0.75rem 0.5rem;
 }
-html body #wrapper #bottom-section #footer {
+
+#footer {
   font-size: 0.875rem;
   padding: 1rem;
   display: flex;
   justify-content: center;
 }
-html body #wrapper #bottom-section #footer #signature {
+
+#signature {
   display: flex;
   align-items: center;
   height: 2.125rem;
   white-space: nowrap;
 }
-html body #wrapper #bottom-section .fa-github {
+
+.fa-github {
   color: black;
   opacity: 0.75;
   transition: transform 0.5s ease-in-out;
 }
-html body #wrapper #bottom-section .fa-github:hover {
+
+.fa-github:hover {
   opacity: 100%;
   transform: rotate(360deg) scale(1.2);
 }
-html body #wrapper .btn {
+
+.btn {
   border-radius: 0.25rem;
   border: solid black 0.0625rem;
   padding: 0.5rem;
@@ -190,40 +218,38 @@ html body #wrapper .btn {
   color: inherit;
   font-weight: inherit;
 }
-html body #wrapper .btn:hover {
+
+.btn:hover {
   background-color: hsl(0, 0%, 90%);
 }
-html body #wrapper .hide {
+
+.hide {
   display: none !important;
 }
 
-#change-units b {
-  font-weight: 900;
-}
-
 @media only screen and (min-width: 30rem) {
-  html body #wrapper #top-section #navigation {
+  #navigation {
     flex-wrap: nowrap;
   }
-  html body #wrapper #top-section #navigation .btn {
+  #navigation .btn {
     flex: 0;
   }
-  html body #wrapper #top-section #navigation #change-units {
+  #change-units {
     order: unset;
   }
-  html body #wrapper #top-section #navigation #search-box {
+  #search-box {
     flex: 0;
     flex-basis: 19.333125rem;
   }
-  html body #wrapper #top-section #navigation #find-btn {
+  #find-btn {
     order: unset;
   }
-  html body #wrapper #weather-container #img-card,
-  html body #wrapper #weather-container #main-card,
-  html body #wrapper #weather-container #secondary-card,
-  html body #wrapper #weather-container #tommorow-card,
-  html body #wrapper #weather-container #after-tommorow-card,
-  html body #wrapper #weather-container #next-card {
+  #img-card,
+  #main-card,
+  #secondary-card,
+  #tommorow-card,
+  #after-tommorow-card,
+  #next-card {
     flex: 0 0 17.25rem;
     aspect-ratio: 1/1;
   }
