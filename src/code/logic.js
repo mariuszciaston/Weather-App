@@ -47,15 +47,6 @@ export default class Logic {
 		return days[date.getDay()];
 	}
 
-	static extractNextDays(data, system) {
-		const days = [9, 17, 25];
-		return days.map((index) => ({
-			day: this.epochToDay(data.list[index].dt),
-			temp: Math.round(data.list[index].main.temp_max) + this.addDegrees(system),
-			icon: data.list[index].weather[0].icon,
-		}));
-	}
-
 	static async grabDataByCity(system, city) {
 		const api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${system}&appid=2871c88944b81fbab922d47012695ba3`;
 
@@ -108,7 +99,29 @@ export default class Logic {
 			const response = await fetch(api, { mode: 'cors' });
 			if (!response.ok) throw new Error(`Localization not found`);
 			const data = await response.json();
-			const nextDays = this.extractNextDays(data, system);
+
+			const nextDays = [];
+			const currentDate = new Date();
+			currentDate.setDate(currentDate.getDate() + 1);
+
+			for (let i = 0; i < 3; i += 1) {
+				const dateStr = currentDate.toISOString().split('T')[0];
+				const dateTimeStr = `${dateStr} 12:00:00`;
+				const dayData = data.list.find((item) => item.dt_txt === dateTimeStr);
+				if (dayData) {
+					nextDays.push({
+						day: this.epochToDay(dayData.dt),
+						temp: Math.round(dayData.main.temp) + this.addDegrees(system),
+						icon: dayData.weather[0].icon,
+						description: dayData.weather[0].description,
+
+
+						
+					});
+				}
+				currentDate.setDate(currentDate.getDate() + 1);
+			}
+
 			return nextDays;
 		} catch (error) {
 			alert(error);

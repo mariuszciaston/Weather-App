@@ -117,6 +117,28 @@ html {
 					box-shadow: 0 0.0625rem 0.125rem 0 rgba(0, 0, 0, 0.2);
 					border: solid 0.0625rem white;
 				}
+
+				.day {
+					font-size: 1.25rem;
+					font-weight: 300;
+				}
+
+				.temp {
+					font-size: 1.25rem;
+					font-weight: 700;
+
+					margin-bottom: 0.25rem;
+					margin-top: 1rem;
+					font-size: 2rem;
+				}
+
+				.icon {
+					width: 6.25rem;
+					height: 6.25rem;
+					aspect-ratio: 1/1;
+					filter: contrast(1.11);
+				}
+
 				#main-card {
 					h1 {
 						font-weight: 500;

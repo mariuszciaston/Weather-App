@@ -148,7 +148,6 @@ export default class UI {
 		clearTextContent('#tommorow-card p');
 		clearTextContent('#after-tommorow-card p');
 		clearTextContent('#next-card p');
-
 	}
 
 	static displayMainCard(data) {
@@ -195,40 +194,16 @@ export default class UI {
 		pressure.append(` ${data.pressureUnit}`);
 	}
 
-	static displayTommorowCard(data) {
-		const day = document.querySelector('#tommorow-card #day');
-		const temp = document.querySelector('#tommorow-card #temp');
-		const icon = document.querySelector('#tommorow-card #icon');
+	static displayCard(data, dayIndex, cardId) {
+		const day = document.querySelector(`#${cardId} .day`);
+		const temp = document.querySelector(`#${cardId} .temp`);
+		const icon = document.querySelector(`#${cardId} .icon`);
 
-		console.log(data);
+		day.append(` ${data.nextDays[dayIndex].day}`);
+		temp.append(` ${data.nextDays[dayIndex].temp}`);
 
-		day.append(` ${data.nextDays[0].day}`);
-		temp.append(` ${data.nextDays[0].temp}`);
-		icon.append(` ${data.nextDays[0].icon}`);
-	}
-
-	static displayAfterTommorowCard(data) {
-		const day = document.querySelector('#after-tommorow-card #day');
-		const temp = document.querySelector('#after-tommorow-card #temp');
-		const icon = document.querySelector('#after-tommorow-card #icon');
-
-		console.log(data);
-
-		day.append(` ${data.nextDays[1].day}`);
-		temp.append(` ${data.nextDays[1].temp}`);
-		icon.append(` ${data.nextDays[1].icon}`);
-	}
-
-	static displayNextCard(data) {
-		const day = document.querySelector('#next-card #day');
-		const temp = document.querySelector('#next-card #temp');
-		const icon = document.querySelector('#next-card #icon');
-
-		console.log(data);
-
-		day.append(` ${data.nextDays[2].day}`);
-		temp.append(` ${data.nextDays[2].temp}`);
-		icon.append(` ${data.nextDays[2].icon}`);
+		icon.src = `https://openweathermap.org/img/wn/${data.nextDays[dayIndex].icon}@4x.png`;
+		icon.alt = data.nextDays[dayIndex].description;
 	}
 
 	static displayWeather(data) {
@@ -236,9 +211,9 @@ export default class UI {
 		this.displayImgCard(data);
 		this.displaySecondaryCard(data);
 
-		this.displayTommorowCard(data);
-		this.displayAfterTommorowCard(data);
-		this.displayNextCard(data);
+		this.displayCard(data, 0, 'tommorow-card');
+		this.displayCard(data, 1, 'after-tommorow-card');
+		this.displayCard(data, 2, 'next-card');
 	}
 
 	static setBcgColor(data) {
