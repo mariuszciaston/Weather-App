@@ -47,6 +47,9 @@ html body #wrapper #top-section #navigation #change-units {
   order: -1;
   min-width: 3.801875rem;
 }
+html body #wrapper #top-section #navigation .bold {
+  font-weight: 900;
+}
 html body #wrapper #top-section #navigation #search-box {
   display: flex;
   flex-wrap: nowrap;

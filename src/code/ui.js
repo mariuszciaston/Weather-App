@@ -9,13 +9,18 @@ export default class UI {
 	}
 
 	static updateUnitBtn(unitBtn, systemUnits) {
-		const newunitBtn = unitBtn;
-		newunitBtn.value = systemUnits;
-		newunitBtn.innerHTML = systemUnits === 'metric' ? '<b>°C</b> | °F' : '°C | <b>°F</b>';
+		const spanC = document.querySelector('#change-units span#C');
+		const spanF = document.querySelector('#change-units span#F');
+
+		const newUnitBtn = unitBtn;
+		newUnitBtn.value = systemUnits;
+
+		spanC.classList.toggle('bold', systemUnits === 'metric');
+		spanF.classList.toggle('bold', systemUnits === 'imperial');
 	}
 
 	static toggleUnit(unitBtn) {
-		const systemUnits = unitBtn.innerHTML.includes('<b>°C</b>') ? 'imperial' : 'metric';
+		const systemUnits = unitBtn.value === 'metric' ? 'imperial' : 'metric';
 		this.updateUnitBtn(unitBtn, systemUnits);
 		this.replaceUnits(systemUnits);
 	}
