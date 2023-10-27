@@ -30,6 +30,7 @@ export default class Logic {
 			weather: [{ main: weather, description, icon }],
 			wind: { speed: windSpeed },
 			main: { temp, feels_like: feelsLike, pressure, humidity },
+			coord: { lat, lon },
 		} = data;
 		const temperature = Math.round(temp) + this.addDegrees(system);
 		const feelsLikeTemp = Math.round(feelsLike) + this.addDegrees(system);
@@ -37,7 +38,22 @@ export default class Logic {
 		const pressureUnit = `${pressure} hPa`;
 		const humidityPercent = `${humidity}%`;
 
-		return { city, country, icon, temperature, feelsLikeTemp, humidityPercent, windSpeedUnit, pressureUnit, description, weather };
+		return { city, country, icon, temperature, feelsLikeTemp, humidityPercent, windSpeedUnit, pressureUnit, description, weather, lat, lon };
+	}
+
+	static epochToDay(epoch) {
+		const date = new Date(epoch * 1000);
+		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		return days[date.getDay()];
+	}
+
+	static extractNextDays(data, system) {
+		const days = [9, 17, 25];
+		return days.map((index) => ({
+			day: this.epochToDay(data.list[index].dt),
+			temp: Math.round(data.list[index].main.temp_max) + this.addDegrees(system),
+			icon: data.list[index].weather[0].icon,
+		}));
 	}
 
 	static async grabDataByCity(system, city) {
@@ -58,6 +74,7 @@ export default class Logic {
 			if (!response.ok) throw new Error(`City '${city}' not found`);
 			const data = this.extractData(await response.json(), system);
 
+			this.grabDataNextDays(system, data.lat, data.lon);
 			return data;
 		} catch (error) {
 			alert(error);
@@ -69,22 +86,31 @@ export default class Logic {
 		const api = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=2871c88944b81fbab922d47012695ba3`;
 
 		try {
-			const response = await new Promise((resolve, reject) => {
-				setTimeout(async () => {
-					try {
-						const res = await fetch(api, { mode: 'cors' });
-						resolve(res);
-					} catch (error) {
-						reject(error);
-					}
-				}, 0);
-			});
+			const response = await fetch(api, { mode: 'cors' });
 
 			if (!response.ok) throw new Error(`Localization not found`);
 			let city = await response.json();
 			city = city[0].name;
 			const data = await this.grabDataByCity(system, city);
 			return data;
+		} catch (error) {
+			alert(error);
+			return null;
+		}
+	}
+
+	static async grabDataNextDays(system, lat, lon) {
+		const api = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${system}&appid=2871c88944b81fbab922d47012695ba3`;
+
+		try {
+			const response = await fetch(api, { mode: 'cors' });
+			if (!response.ok) throw new Error(`Localization not found`);
+			const data = await response.json();
+			const nextDays = this.extractNextDays(data, system);
+
+			console.log(nextDays);
+
+			return nextDays;
 		} catch (error) {
 			alert(error);
 			return null;
