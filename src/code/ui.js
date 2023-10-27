@@ -133,14 +133,22 @@ export default class UI {
 	static clearWeather() {
 		const mainCard = document.querySelector('#main-card');
 		const imgCard = document.querySelector('#img-card');
-		const secondaryCardSpans = document.querySelectorAll('#secondary-card span');
 
 		mainCard.textContent = '';
 		imgCard.textContent = '';
-		secondaryCardSpans.forEach((param) => {
-			const span = param;
-			span.textContent = '';
-		});
+
+		function clearTextContent(selector) {
+			const elements = document.querySelectorAll(selector);
+			elements.forEach((element) => {
+				const elem = element;
+				elem.textContent = '';
+			});
+		}
+		clearTextContent('#secondary-card span');
+		clearTextContent('#tommorow-card p');
+		clearTextContent('#after-tommorow-card p');
+		clearTextContent('#next-card p');
+
 	}
 
 	static displayMainCard(data) {
@@ -187,21 +195,50 @@ export default class UI {
 		pressure.append(` ${data.pressureUnit}`);
 	}
 
-	// static displayTommorowCard(data) {
-	// const tommorowCard = document.querySelector('#tommorow-card');
-	// const afterTommorowCard = document.querySelector('#after-tommorow-card');
-	// const nextAfterTommorowCard = document.querySelector('#next-after-tommorow-card');
+	static displayTommorowCard(data) {
+		const day = document.querySelector('#tommorow-card #day');
+		const temp = document.querySelector('#tommorow-card #temp');
+		const icon = document.querySelector('#tommorow-card #icon');
 
-	// weather.appendChild(tommorowCard);
-	// weather.appendChild(afterTommorowCard);
-	// weather.appendChild(nextAfterTommorowCard);
-	// }
+		console.log(data);
+
+		day.append(` ${data.nextDays[0].day}`);
+		temp.append(` ${data.nextDays[0].temp}`);
+		icon.append(` ${data.nextDays[0].icon}`);
+	}
+
+	static displayAfterTommorowCard(data) {
+		const day = document.querySelector('#after-tommorow-card #day');
+		const temp = document.querySelector('#after-tommorow-card #temp');
+		const icon = document.querySelector('#after-tommorow-card #icon');
+
+		console.log(data);
+
+		day.append(` ${data.nextDays[1].day}`);
+		temp.append(` ${data.nextDays[1].temp}`);
+		icon.append(` ${data.nextDays[1].icon}`);
+	}
+
+	static displayNextCard(data) {
+		const day = document.querySelector('#next-card #day');
+		const temp = document.querySelector('#next-card #temp');
+		const icon = document.querySelector('#next-card #icon');
+
+		console.log(data);
+
+		day.append(` ${data.nextDays[2].day}`);
+		temp.append(` ${data.nextDays[2].temp}`);
+		icon.append(` ${data.nextDays[2].icon}`);
+	}
 
 	static displayWeather(data) {
 		this.displayMainCard(data);
 		this.displayImgCard(data);
 		this.displaySecondaryCard(data);
-		// this.displayTommorowCard(data);
+
+		this.displayTommorowCard(data);
+		this.displayAfterTommorowCard(data);
+		this.displayNextCard(data);
 	}
 
 	static setBcgColor(data) {

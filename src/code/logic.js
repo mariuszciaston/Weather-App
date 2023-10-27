@@ -74,7 +74,9 @@ export default class Logic {
 			if (!response.ok) throw new Error(`City '${city}' not found`);
 			const data = this.extractData(await response.json(), system);
 
-			this.grabDataNextDays(system, data.lat, data.lon);
+			const nextDays = await this.grabDataNextDays(system, data.lat, data.lon);
+			data.nextDays = nextDays;
+
 			return data;
 		} catch (error) {
 			alert(error);
@@ -107,9 +109,6 @@ export default class Logic {
 			if (!response.ok) throw new Error(`Localization not found`);
 			const data = await response.json();
 			const nextDays = this.extractNextDays(data, system);
-
-			console.log(nextDays);
-
 			return nextDays;
 		} catch (error) {
 			alert(error);
