@@ -52,9 +52,9 @@ export default class UI {
 	}
 
 	static replaceUnits(systemUnits) {
-		const temperatureElement = document.querySelector('#main-card #temperature');
-		const feelsLikeElement = document.querySelector('#secondary-card #feels-like');
-		const windSpeedElement = document.querySelector('#secondary-card #wind-speed');
+		const temperatureElement = document.querySelector('#temperature');
+		const feelsLikeElement = document.querySelector('#feels-like');
+		const windSpeedElement = document.querySelector('#wind-speed');
 		const tommorowTempElement = document.querySelector('#tommorow-card .temp');
 		const afterTempElement = document.querySelector('#after-tommorow-card .temp');
 		const nextTempElement = document.querySelector('#next-card .temp');
