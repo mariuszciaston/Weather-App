@@ -85,7 +85,7 @@ export default class Logic {
 	}
 
 	static async grabDataByPosition(system, lat, lon) {
-		const api = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=2871c88944b81fbab922d47012695ba3`;
+		const api = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=2871c88944b81fbab922d47012695ba3`;
 
 		try {
 			const response = await fetch(api, { mode: 'cors' });
@@ -102,7 +102,7 @@ export default class Logic {
 	}
 
 	static async grabDataNextDays(system, lat, lon) {
-		const api = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${system}&appid=2871c88944b81fbab922d47012695ba3`;
+		const api = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${system}&appid=2871c88944b81fbab922d47012695ba3`;
 
 		try {
 			const response = await fetch(api, { mode: 'cors' });
