@@ -205,7 +205,15 @@ export default class UI {
 	}
 
 	static setBcgColor(data) {
-		let temp = parseInt(data.temperature, 10);
+		let temp = data.temperature;
+
+		if (data.temperature.includes('°F')) {
+			const system = 'metric';
+			temp = this.convertTemperature(data.temperature, system);
+		}
+
+		temp = parseInt(temp, 10);
+
 		const minTemp = 0;
 		const maxTemp = 30;
 
