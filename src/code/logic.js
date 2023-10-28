@@ -55,6 +55,20 @@ export default class Logic {
 		return nextDays;
 	}
 
+	static async getCurrentPosition(system) {
+		try {
+			const position = await new Promise((resolve, reject) => {
+				navigator.geolocation.getCurrentPosition(resolve, reject);
+			});
+			const { latitude, longitude } = position.coords;
+			const data = await Logic.grabDataByPosition(system, latitude, longitude);
+			return data;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
+
 	static async grabDataByPosition(system, lat, lon) {
 		const api = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=2871c88944b81fbab922d47012695ba3`;
 
@@ -81,7 +95,7 @@ export default class Logic {
 					} catch (error) {
 						reject(error);
 					}
-				}, 1000);
+				}, 750);
 			});
 
 			if (!response.ok) throw new Error(`City '${city}' not found`);
