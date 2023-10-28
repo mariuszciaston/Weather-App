@@ -11,10 +11,8 @@ export default class UI {
 	static updateUnitBtn(unitBtn, systemUnits) {
 		const spanC = document.querySelector('#change-units span#C');
 		const spanF = document.querySelector('#change-units span#F');
-
 		const newUnitBtn = unitBtn;
 		newUnitBtn.value = systemUnits;
-
 		spanC.classList.toggle('bold', systemUnits === 'metric');
 		spanF.classList.toggle('bold', systemUnits === 'imperial');
 	}
@@ -52,143 +50,87 @@ export default class UI {
 	}
 
 	static replaceUnits(systemUnits) {
-		const temperatureElement = document.querySelector('#temperature');
-		const feelsLikeElement = document.querySelector('#feels-like');
-		const windSpeedElement = document.querySelector('#wind-speed');
-		const tommorowTempElement = document.querySelector('#tommorow-card .temp');
-		const afterTempElement = document.querySelector('#after-tommorow-card .temp');
-		const nextTempElement = document.querySelector('#next-card .temp');
+		const elements = ['#temperature', '#feels-like', '#wind-speed', '#tommorow-card .temp', '#after-tommorow-card .temp', '#next-card .temp'];
 
-		const mainTemp = temperatureElement.textContent;
-		const feelsLike = feelsLikeElement.textContent;
-		const windSpeed = windSpeedElement.textContent;
-		const tommorowTemp = tommorowTempElement.textContent;
-		const afterTemp = afterTempElement.textContent;
-		const nextTemp = nextTempElement.textContent;
-
-		temperatureElement.textContent = this.convertTemperature(mainTemp, systemUnits);
-		feelsLikeElement.textContent = this.convertTemperature(feelsLike, systemUnits);
-		windSpeedElement.textContent = this.convertWindSpeed(windSpeed, systemUnits);
-
-		tommorowTempElement.textContent = this.convertTemperature(tommorowTemp, systemUnits);
-		afterTempElement.textContent = this.convertTemperature(afterTemp, systemUnits);
-		nextTempElement.textContent = this.convertTemperature(nextTemp, systemUnits);
+		elements.forEach((selector) => {
+			const element = document.querySelector(selector);
+			const value = element.textContent;
+			const isWindSpeed = selector === '#wind-speed';
+			element.textContent = isWindSpeed ? this.convertWindSpeed(value, systemUnits) : this.convertTemperature(value, systemUnits);
+		});
 	}
 
 	static loading(toggle) {
 		const spinner = document.querySelector('#loading-spinner');
 		const weather = document.querySelector('#weather-container');
+		weather.classList.toggle('hide', toggle);
+		spinner.classList.toggle('hide', !toggle);
+	}
 
-		if (toggle) {
-			weather.classList.add('hide');
-			spinner.classList.remove('hide');
-		} else {
-			spinner.classList.add('hide');
-			weather.classList.remove('hide');
-		}
+	static updateUI(data) {
+		this.loading(false);
+		this.clearWeather();
+		this.displayWeather(data);
+		this.setBcgColor(data);
 	}
 
 	static pickCity(e) {
-		this.clearWeather();
 		this.loading(true);
 		if (e.target.classList.contains('btn')) {
 			Logic.grabDataByCity(this.setUnit(), e.target.textContent).then((data) => {
-				this.loading(false);
-				this.clearWeather();
-				this.displayWeather(data);
-				this.setBcgColor(data);
+				this.updateUI(data);
 			});
 		}
 	}
 
 	static searchCity() {
 		const input = document.querySelector('#search-input');
-
 		input.value = input.value.trim();
 		if (input.value !== '') {
-			this.clearWeather();
 			this.loading(true);
 			Logic.grabDataByCity(this.setUnit(), input.value)
 				.then((data) => {
-					this.loading(false);
 					input.value = '';
-					this.clearWeather();
-					this.displayWeather(data);
-					this.setBcgColor(data);
+					this.updateUI(data);
 				})
 				.catch(() => {
-					this.loading(false);
-					input.value = '';
+					this.setGreyColor();
 				});
 		}
 	}
 
 	static async findMe() {
-		this.clearWeather();
 		this.loading(true);
-		try {
-			const position = await new Promise((resolve, reject) => {
-				navigator.geolocation.getCurrentPosition(resolve, reject);
-			});
-			const { latitude } = position.coords;
-			const { longitude } = position.coords;
-
-			Logic.grabDataByPosition(this.setUnit(), latitude, longitude).then((data) => {
-				this.loading(false);
-				this.clearWeather();
-				this.displayWeather(data);
-				this.setBcgColor(data);
-			});
-
-			return position;
-		} catch (error) {
-			console.error(error);
-			return null;
+		const data = await Logic.getCurrentPosition(this.setUnit());
+		if (data) {
+			this.updateUI(data);
 		}
 	}
 
 	static clearWeather() {
-		const mainCard = document.querySelector('#main-card');
-		const imgCard = document.querySelector('#img-card');
-
-		mainCard.textContent = '';
-		imgCard.textContent = '';
-
-		function clearTextContent(selector) {
-			const elements = document.querySelectorAll(selector);
-			elements.forEach((element) => {
-				const elem = element;
-				elem.textContent = '';
-			});
-		}
-		clearTextContent('#secondary-card span');
-		clearTextContent('#tommorow-card p');
-		clearTextContent('#after-tommorow-card p');
-		clearTextContent('#next-card p');
+		const cardIds = ['main-card', 'img-card', 'secondary-card', 'tommorow-card', 'after-tommorow-card', 'next-card'];
+		cardIds.forEach((id) => {
+			const card = document.querySelector(`#${id}`);
+			card.textContent = '';
+		});
 	}
 
 	static displayMainCard(data) {
 		const mainCard = document.querySelector('#main-card');
+		const elements = ['city-country', 'temperature', 'description'];
 
-		const cityCountry = document.createElement('h1');
-		const temperature = document.createElement('h1');
-		const description = document.createElement('h1');
-
-		cityCountry.setAttribute('id', 'city-country');
-		temperature.setAttribute('id', 'temperature');
-		description.setAttribute('id', 'description');
+		elements.forEach((element) => {
+			const el = document.createElement('h1');
+			el.setAttribute('id', element);
+			el.textContent = data[element];
+			mainCard.appendChild(el);
+		});
 
 		if (data.country !== undefined) {
-			cityCountry.textContent = `${data.city}, ${data.country}`;
+			document.querySelector('#city-country').textContent = `${data.city}, ${data.country}`;
 		} else {
-			cityCountry.textContent = `${data.city}`;
+			document.querySelector('#city-country').textContent = `${data.city}`;
 		}
-		temperature.textContent = `${data.temperature}`;
-		description.textContent = `${data.description}`;
-
-		mainCard.appendChild(cityCountry);
-		mainCard.appendChild(temperature);
-		mainCard.appendChild(description);
 	}
 
 	static displayImgCard(data) {
@@ -200,27 +142,41 @@ export default class UI {
 	}
 
 	static displaySecondaryCard(data) {
-		const feelsLike = document.querySelector('#feels-like');
-		const humidity = document.querySelector('#humidity');
-		const windSpeed = document.querySelector('#wind-speed');
-		const pressure = document.querySelector('#pressure');
+		const secondaryCard = document.querySelector('#secondary-card');
+		const elements = ['feels-like', 'humidity', 'wind-speed', 'pressure'];
+		const descriptions = ['Feels like: ', 'Humidity: ', 'Wind speed: ', 'Pressure: '];
+		const dataValues = [data.feelsLikeTemp, data.humidityPercent, data.windSpeedUnit, data.pressureUnit];
 
-		feelsLike.append(` ${data.feelsLikeTemp}`);
-		humidity.append(` ${data.humidityPercent}`);
-		windSpeed.append(` ${data.windSpeedUnit}`);
-		pressure.append(` ${data.pressureUnit}`);
+		elements.forEach((element, index) => {
+			const p = document.createElement('p');
+			p.textContent = descriptions[index];
+			const span = document.createElement('span');
+			span.id = element;
+			span.append(` ${dataValues[index]}`);
+			p.appendChild(span);
+			secondaryCard.appendChild(p);
+		});
+	}
+
+	static createElementWithClass(elementType, className) {
+		const element = document.createElement(elementType);
+		element.className = className;
+		return element;
 	}
 
 	static displayCard(data, dayIndex, cardId) {
-		const day = document.querySelector(`#${cardId} .day`);
-		const temp = document.querySelector(`#${cardId} .temp`);
-		const icon = document.querySelector(`#${cardId} .icon`);
+		const card = document.querySelector(`#${cardId}`);
 
-		day.append(` ${data.nextDays[dayIndex].day}`);
-		temp.append(` ${data.nextDays[dayIndex].temp}`);
+		const dayElement = this.createElementWithClass('p', 'day');
+		const tempElement = this.createElementWithClass('p', 'temp');
+		const iconElement = this.createElementWithClass('img', 'icon');
 
-		icon.src = `https://openweathermap.org/img/wn/${data.nextDays[dayIndex].icon}@4x.png`;
-		icon.alt = data.nextDays[dayIndex].description;
+		dayElement.textContent = ` ${data.nextDays[dayIndex].day}`;
+		tempElement.textContent = ` ${data.nextDays[dayIndex].temp}`;
+		iconElement.src = `https://openweathermap.org/img/wn/${data.nextDays[dayIndex].icon}@4x.png`;
+		iconElement.alt = data.nextDays[dayIndex].description;
+
+		card.append(dayElement, tempElement, iconElement);
 	}
 
 	static displayWeather(data) {
@@ -228,9 +184,9 @@ export default class UI {
 		this.displayImgCard(data);
 		this.displaySecondaryCard(data);
 
-		this.displayCard(data, 0, 'tommorow-card');
-		this.displayCard(data, 1, 'after-tommorow-card');
-		this.displayCard(data, 2, 'next-card');
+		['tommorow-card', 'after-tommorow-card', 'next-card'].forEach((cardId, index) => {
+			this.displayCard(data, index, cardId);
+		});
 	}
 
 	static setBcgColor(data) {
@@ -262,6 +218,11 @@ export default class UI {
 		document.body.style.backgroundColor = color;
 	}
 
+	static setGreyColor() {
+		const color = `hsl(0, 0%, 75%)`;
+		document.body.style.backgroundColor = color;
+	}
+
 	static attachListeners() {
 		const sampleLocations = document.querySelector('#sample-locations');
 		const unitBtn = document.querySelector('#change-units');
@@ -277,8 +238,7 @@ export default class UI {
 	}
 
 	static runApp() {
+		this.setUnit();
 		this.attachListeners();
-
-		this.findMe();
 	}
 }
