@@ -215,12 +215,12 @@ export default class UI {
 		const returnHue = 360 - (degCount * hslsDeg - (maxHsl - 360));
 
 		const color = `hsl(${returnHue}, 100%, 75%)`;
-		document.body.style.backgroundColor = color;
+		document.documentElement.style.backgroundColor = color;
 	}
 
 	static setGreyColor() {
 		const color = `hsl(0, 0%, 75%)`;
-		document.body.style.backgroundColor = color;
+		document.documentElement.style.backgroundColor = color;
 	}
 
 	static attachListeners() {

@@ -1,6 +1,6 @@
 html {
-	background-color: white;
 	background-color: hsl(0, 0%, 75%);
+	transition: 2s background-color;
 	color: black;
 	font-size: 16px;
 	font-family: 'Roboto', sans-serif;
@@ -10,7 +10,6 @@ html {
 
 body {
 	min-height: 100%;
-	transition: 2s background-color;
 	display: flex;
 	justify-content: center;
 }
@@ -93,7 +92,7 @@ body {
 	justify-content: center;
 	display: flex;
 
-	.fa-cog {
+	.fa-sun {
 		color: black;
 		opacity: 0.25;
 	}
