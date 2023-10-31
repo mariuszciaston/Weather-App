@@ -52,7 +52,7 @@ type WeatherForecast = {
 	description: string;
 };
 
-type WeatherData = {
+export type WeatherData = {
 	city: string;
 	country: string;
 	icon: string;
