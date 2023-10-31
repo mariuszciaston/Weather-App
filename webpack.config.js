@@ -1,11 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
-	mode: 'development',
+	mode: 'production',
 	entry: './src/index.ts',
 	output: {
 		filename: 'main.js',
@@ -32,17 +33,6 @@ module.exports = {
 				test: /\.css$/i,
 				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
-
-			// {
-			// 	test: /\.(?:js|mjs|cjs)$/,
-			// 	exclude: /node_modules/,
-			// 	use: {
-			// 		loader: 'babel-loader',
-			// 		options: {
-			// 			presets: [['@babel/preset-env', { targets: '>0.25%' }]],
-			// 		},
-			// 	},
-			// },
 			{
 				test: /\.tsx?$/,
 				use: 'ts-loader',
@@ -56,6 +46,6 @@ module.exports = {
 	},
 
 	optimization: {
-		minimizer: [new CssMinimizerPlugin()],
+		minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
 	},
 };
