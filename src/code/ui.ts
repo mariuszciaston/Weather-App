@@ -2,14 +2,14 @@ import Logic from './logic';
 import type { WeatherData } from './logic';
 
 export default class UI {
-	static setUnit(system?: string) {
+	static setUnit(system?: string): string {
 		const unitBtn = document.querySelector('#change-units') as HTMLButtonElement;
 		const systemUnits = unitBtn.dataset.unit || system || 'metric';
 		this.updateUnitBtn(unitBtn, systemUnits);
 		return systemUnits;
 	}
 
-	static updateUnitBtn(unitBtn: HTMLButtonElement, systemUnits: string) {
+	static updateUnitBtn(unitBtn: HTMLButtonElement, systemUnits: string): void {
 		const spanC = document.querySelector('#change-units span#C');
 		const spanF = document.querySelector('#change-units span#F');
 		unitBtn.dataset.unit = systemUnits;
@@ -17,13 +17,13 @@ export default class UI {
 		spanF.classList.toggle('bold', systemUnits === 'imperial');
 	}
 
-	static toggleUnit(unitBtn: HTMLButtonElement) {
+	static toggleUnit(unitBtn: HTMLButtonElement): void {
 		const systemUnits = unitBtn.dataset.unit === 'metric' ? 'imperial' : 'metric';
 		this.updateUnitBtn(unitBtn, systemUnits);
 		this.replaceUnits(systemUnits);
 	}
 
-	static convertTemperature(temp: string, systemUnits: string) {
+	static convertTemperature(temp: string, systemUnits: string): string {
 		let tempNumber = parseFloat(temp);
 		if (systemUnits === 'imperial' && temp.includes('°C')) {
 			tempNumber = Math.round((tempNumber * 9) / 5 + 32);
@@ -36,7 +36,7 @@ export default class UI {
 		return temp;
 	}
 
-	static convertWindSpeed(speed: string, systemUnits: string) {
+	static convertWindSpeed(speed: string, systemUnits: string): string {
 		let speedNumber = parseFloat(speed);
 		if (systemUnits === 'imperial' && speed.includes('km/h')) {
 			speedNumber = Math.round(speedNumber / 1.6093);
@@ -49,7 +49,7 @@ export default class UI {
 		return speed;
 	}
 
-	static replaceUnits(systemUnits: string) {
+	static replaceUnits(systemUnits: string): void {
 		const elements = ['#temperature', '#feels-like', '#wind-speed', '#tommorow-card .temp', '#after-tommorow-card .temp', '#next-card .temp'];
 
 		elements.forEach((selector) => {
@@ -60,30 +60,30 @@ export default class UI {
 		});
 	}
 
-	static loading(toggle: boolean) {
+	static loading(toggle: boolean): void {
 		const spinner = document.querySelector('#loading-spinner');
 		const weather = document.querySelector('#weather-container');
 		weather.classList.toggle('hide', toggle);
 		spinner.classList.toggle('hide', !toggle);
 	}
 
-	static updateUI(data: WeatherData) {
+	static updateUI(data: WeatherData): void {
 		this.loading(false);
 		this.clearWeather();
 		this.displayWeather(data);
 		this.setBcgColor(data);
 	}
 
-	static pickCity(e: Event) {
+	static pickCity(e: Event): void {
 		this.loading(true);
-		if ((e.target as Element).classList.contains('btn')) {
-			Logic.grabDataByCity(this.setUnit(), (e.target as Element).textContent).then((data) => {
+		if ((e.target as HTMLElement).classList.contains('btn')) {
+			Logic.grabDataByCity(this.setUnit(), (e.target as HTMLElement).textContent).then((data) => {
 				this.updateUI(data);
 			});
 		}
 	}
 
-	static searchCity() {
+	static searchCity(): void {
 		const input = document.querySelector('#search-input') as HTMLInputElement;
 		input.value = input.value.trim();
 		if (input.value !== '') {
@@ -99,7 +99,7 @@ export default class UI {
 		}
 	}
 
-	static async findMe() {
+	static async findMe(): Promise<void> {
 		this.loading(true);
 		const data = await Logic.getCurrentPosition(this.setUnit());
 		if (data) {
@@ -107,7 +107,7 @@ export default class UI {
 		}
 	}
 
-	static clearWeather() {
+	static clearWeather(): void {
 		const cardIds = ['main-card', 'img-card', 'secondary-card', 'tommorow-card', 'after-tommorow-card', 'next-card'];
 		cardIds.forEach((id) => {
 			const card = document.querySelector(`#${id}`);
@@ -115,7 +115,7 @@ export default class UI {
 		});
 	}
 
-	static displayMainCard(data: WeatherData) {
+	static displayMainCard(data: WeatherData): void {
 		const mainCard = document.querySelector('#main-card');
 		const elements = ['city', 'temperature', 'description'] as const;
 
@@ -133,7 +133,7 @@ export default class UI {
 		}
 	}
 
-	static displayImgCard(data: WeatherData) {
+	static displayImgCard(data: WeatherData): void {
 		const imgCard = document.querySelector('#img-card');
 		const img = document.createElement('img');
 		img.src = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
@@ -141,7 +141,7 @@ export default class UI {
 		imgCard.appendChild(img);
 	}
 
-	static displaySecondaryCard(data: WeatherData) {
+	static displaySecondaryCard(data: WeatherData): void {
 		const secondaryCard = document.querySelector('#secondary-card');
 		const elements = ['feels-like', 'humidity', 'wind-speed', 'pressure'];
 		const descriptions = ['Feels like: ', 'Humidity: ', 'Wind speed: ', 'Pressure: '];
@@ -158,13 +158,13 @@ export default class UI {
 		});
 	}
 
-	static createElementWithClass(elementType: string, className: string) {
+	static createElementWithClass(elementType: string, className: string): HTMLElement {
 		const element = document.createElement(elementType);
 		element.className = className;
 		return element;
 	}
 
-	static displayCard(data: WeatherData, dayIndex: number, cardId: string) {
+	static displayCard(data: WeatherData, dayIndex: number, cardId: string): void {
 		const card = document.querySelector(`#${cardId}`);
 
 		const dayElement = this.createElementWithClass('p', 'day');
@@ -179,7 +179,7 @@ export default class UI {
 		card.append(dayElement, tempElement, iconElement);
 	}
 
-	static displayWeather(data: WeatherData) {
+	static displayWeather(data: WeatherData): void {
 		this.displayMainCard(data);
 		this.displayImgCard(data);
 		this.displaySecondaryCard(data);
@@ -189,7 +189,7 @@ export default class UI {
 		});
 	}
 
-	static setBcgColor(data: WeatherData) {
+	static setBcgColor(data: WeatherData): void {
 		let tempStr = data.temperature;
 		let temp: number;
 
@@ -219,12 +219,12 @@ export default class UI {
 		document.documentElement.style.backgroundColor = color;
 	}
 
-	static setGreyColor() {
+	static setGreyColor(): void {
 		const color = `hsl(0, 0%, 75%)`;
 		document.documentElement.style.backgroundColor = color;
 	}
 
-	static attachListeners() {
+	static attachListeners(): void {
 		const sampleLocations = document.querySelector('#sample-locations');
 		const unitBtn = document.querySelector('#change-units') as HTMLButtonElement;
 		const searchBox = document.querySelector('#search-box');
@@ -238,7 +238,7 @@ export default class UI {
 		unitBtn.addEventListener('click', () => this.toggleUnit(unitBtn));
 	}
 
-	static runApp() {
+	static runApp(): void {
 		this.setUnit();
 		this.attachListeners();
 	}
