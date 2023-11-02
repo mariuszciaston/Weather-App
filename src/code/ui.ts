@@ -1,5 +1,5 @@
 import Logic from './logic';
-import type { WeatherData } from './logic';
+import type { WeatherData } from './types';
 
 export default class UI {
 	static setUnit(system?: string): string {
