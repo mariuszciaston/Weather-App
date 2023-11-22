@@ -1,6 +1,6 @@
 # Weather-App
 
-Just a weather app to train and show my asynchronous code and API handling skills.
+Weather app to train my asynchronous code and API handling skills.
 
 Features:<br>
 • <b>Background color is based on temperature!</b> (hsl color space interpolates from blue when it's freezing cold to red when it's hot)<br>
